@@ -1,4 +1,4 @@
-package com.rencia.owen_bank_app.utils;
+package com.rencia.owen_bank_app.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

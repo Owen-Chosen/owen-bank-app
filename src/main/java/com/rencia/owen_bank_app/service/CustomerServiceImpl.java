@@ -1,12 +1,14 @@
 package com.rencia.owen_bank_app.service;
 
+import com.rencia.owen_bank_app.dto.EmailInfo;
 import com.rencia.owen_bank_app.entity.Customer;
 import com.rencia.owen_bank_app.repository.CustomerRepository;
-import com.rencia.owen_bank_app.utils.AccountInfo;
-import com.rencia.owen_bank_app.utils.BankResponse;
-import com.rencia.owen_bank_app.utils.CustomerInfo;
-import com.rencia.owen_bank_app.utils.Response;
+import com.rencia.owen_bank_app.dto.AccountInfo;
+import com.rencia.owen_bank_app.dto.BankResponse;
+import com.rencia.owen_bank_app.dto.CustomerInfo;
+import com.rencia.owen_bank_app.utils.ResponseDetails;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -17,13 +19,19 @@ public class CustomerServiceImpl implements CustomerService{
     @Autowired
     CustomerRepository customerRepository;
 
+    @Autowired
+    EmailService emailService;
+
+    @Value("${spring.mail.username}")
+    private String senderEmail;
+
     @Override
     public BankResponse createCustomerAccount(CustomerInfo info) {
 
         if (customerRepository.existsByEmail(info.getEmail())) {
             return new BankResponse(
-                    Response.ACCOUNT_CREATION_FAILED_CODE,
-                    Response.ACCOUNT_CREATION_FAILED_MESSAGE,
+                    ResponseDetails.ACCOUNT_CREATION_FAILED_CODE,
+                    ResponseDetails.ACCOUNT_CREATION_FAILED_MESSAGE,
                     null);
         }
 
@@ -48,12 +56,19 @@ public class CustomerServiceImpl implements CustomerService{
                 .build();
 
         Customer c = customerRepository.save(newCustomer);
+        EmailInfo emailInfo = EmailInfo.builder()
+                .senderEmail(senderEmail)
+                .recipientEmail(c.getEmail())
+                .recipientFullName(c.getFirstName() + " " + c.getLastName())
+                .recipientAccountNumber(c.getAccountNumber())
+                .build();
+        emailService.sendCreationEmail(emailInfo);
 
-        return new BankResponse(
-                Response.ACCOUNT_CREATION_SUCCESS_CODE,
-                Response.ACCOUNT_CREATION_SUCCESS_MESSAGE,
-                newAccountInfo
-        );
+        return BankResponse.builder()
+                .responseCode(ResponseDetails.ACCOUNT_CREATION_SUCCESS_CODE)
+                .responseMessage(ResponseDetails.ACCOUNT_CREATION_SUCCESS_MESSAGE)
+                .accountInfo(newAccountInfo)
+                .build();
     }
 
 }

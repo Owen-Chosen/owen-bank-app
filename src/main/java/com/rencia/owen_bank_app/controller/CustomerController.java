@@ -1,8 +1,9 @@
 package com.rencia.owen_bank_app.controller;
 
+import com.rencia.owen_bank_app.service.CustomerService;
 import com.rencia.owen_bank_app.service.CustomerServiceImpl;
-import com.rencia.owen_bank_app.utils.BankResponse;
-import com.rencia.owen_bank_app.utils.CustomerInfo;
+import com.rencia.owen_bank_app.dto.BankResponse;
+import com.rencia.owen_bank_app.dto.CustomerInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,11 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class CustomerController {
 
     @Autowired
-    CustomerServiceImpl customerServiceImpl;
+    CustomerService customerService;
 
-    @PostMapping("/create")
+    @PostMapping(path = "/create")
     public BankResponse createCustomerAccount (@RequestBody CustomerInfo customerInfo) {
-
-        return customerServiceImpl.createCustomerAccount(customerInfo);
+        return customerService.createCustomerAccount(customerInfo);
     }
 }
+
+//qhwlhziecyvilecb

@@ -1,12 +1,14 @@
-package com.rencia.owen_bank_app.utils;
+package com.rencia.owen_bank_app.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class BankResponse {
 
     private String responseCode;

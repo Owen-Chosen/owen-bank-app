@@ -28,17 +28,9 @@ public class CustomerServiceImpl implements CustomerService{
         }
 
         AccountInfo newAccountInfo = AccountInfo.builder()
-                .firstName(info.getFirstName())
-                .lastName(info.getLastName())
-                .address(info.getAddress())
-                .email(info.getEmail())
-                .gender(info.getGender())
-                .phoneNumber(info.getPhoneNumber())
-                .stateOfOrigin(info.getStateOfOrigin())
-                .alternativePhoneNumber(info.getAlternativePhoneNumber())
+                .fullName(info.getFirstName() +" "+ info.getLastName())
                 .accountBalance(BigDecimal.ZERO)
                 .accountNumber("2025"+ (int)(999999 * Math.random() + 100000))
-                .status(info.getStatus())
                 .build();
 
         Customer newCustomer = Customer.builder()

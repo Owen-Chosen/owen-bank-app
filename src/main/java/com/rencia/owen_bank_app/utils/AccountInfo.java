@@ -13,15 +13,7 @@ import java.math.BigDecimal;
 @Builder
 public class AccountInfo {
 
-    private String firstName;
-    private String lastName;
-    private String address;
-    private String gender;
-    private String stateOfOrigin;
+    private String fullName;
     private String accountNumber;
     private BigDecimal accountBalance;
-    private String email;
-    private String phoneNumber;
-    private String alternativePhoneNumber;
-    private String status;
 }

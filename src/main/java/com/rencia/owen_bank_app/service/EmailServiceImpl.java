@@ -12,17 +12,24 @@ public class EmailServiceImpl implements EmailService{
     @Autowired
     JavaMailSender javaMailSender;
 
+    @Autowired
+    SimpleMailMessage emailMessage;
+
     @Override
     public void sendCreationEmail(EmailInfo emailInfo) {
 
-        SimpleMailMessage emailMessage = new SimpleMailMessage();
-        emailMessage.setFrom(emailInfo.getSenderEmail());
-        emailMessage.setTo(emailInfo.getRecipientEmail());
-        emailMessage.setSubject("ACCOUNT CREATION");
-        emailMessage.setText("Account Created Successfully \n" +
-                "Account Name: " + emailInfo.getRecipientFullName() + "\n" +
-                "Account Number: " + emailInfo.getRecipientAccountNumber());
+        try {
+            emailMessage.setFrom(emailInfo.getSenderEmail());
+            emailMessage.setTo(emailInfo.getRecipientEmail());
+            emailMessage.setSubject("ACCOUNT CREATION");
+            emailMessage.setText("Account Created Successfully \n" +
+                    "Account Name: " + emailInfo.getRecipientFullName() + "\n" +
+                    "Account Number: " + emailInfo.getRecipientAccountNumber());
 
-        javaMailSender.send(emailMessage);
+            javaMailSender.send(emailMessage);
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }

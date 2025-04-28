@@ -29,4 +29,8 @@ public class ResponseDetails {
 
     public static String INSUFFICIENT_FUND_MESSAGE="Insufficient Fund";
 
+    public static String TRANSFER_SUCCESSFUL_CODE="500";
+
+    public static String TRANSFER_SUCCESSFUL_MESSAGE="Transfer Successful";
+
 }

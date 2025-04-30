@@ -1,17 +1,15 @@
 package com.rencia.owen_bank_app.controller;
 
-import com.rencia.owen_bank_app.dto.CreditDebitDTO;
-import com.rencia.owen_bank_app.dto.TransferTransactionResponse;
+import com.rencia.owen_bank_app.dto.*;
+import com.rencia.owen_bank_app.entity.Transaction;
 import com.rencia.owen_bank_app.service.CreditDebitService;
 import com.rencia.owen_bank_app.service.CustomerService;
-import com.rencia.owen_bank_app.service.CustomerServiceImpl;
-import com.rencia.owen_bank_app.dto.BankResponse;
-import com.rencia.owen_bank_app.dto.CustomerInfo;
+import com.rencia.owen_bank_app.service.StatementService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/bank")
@@ -22,6 +20,9 @@ public class CustomerController {
 
     @Autowired
     CreditDebitService creditDebitService;
+
+    @Autowired
+    StatementService statementService;
 
     @PostMapping(path = "/create")
     public BankResponse createCustomerAccount (@RequestBody CustomerInfo customerInfo) {
@@ -41,6 +42,11 @@ public class CustomerController {
     @PostMapping("/transfer")
     public TransferTransactionResponse intraBankTransfer (@RequestBody CreditDebitDTO creditDebitDTO) {
         return creditDebitService.intraBankTransfer(creditDebitDTO);
+    }
+
+    @GetMapping("/statement")
+    private List<Transaction> getStatement(@RequestBody StatementRequestInfo statementRequestInfo){
+        return statementService.getTransactions(statementRequestInfo);
     }
 
 }

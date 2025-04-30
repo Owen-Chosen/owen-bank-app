@@ -2,10 +2,13 @@ package com.rencia.owen_bank_app.service;
 
 import com.rencia.owen_bank_app.dto.*;
 import com.rencia.owen_bank_app.entity.Customer;
+import com.rencia.owen_bank_app.entity.Transaction;
 import com.rencia.owen_bank_app.repository.CustomerRepository;
 import com.rencia.owen_bank_app.utils.ResponseDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
 
 @Service
 public class CreditDebitServiceImpl implements CreditDebitService {
@@ -24,6 +27,14 @@ public class CreditDebitServiceImpl implements CreditDebitService {
         else{
             Customer customer = customerRepository.findByAccountNumber(creditDebitDTO.getCreditAccountNumber());
             customer.setAccountBalance(customer.getAccountBalance().add(creditDebitDTO.getAmount()));
+            Set<Transaction> transactions = customer.getTransactions();
+            transactions.add(Transaction.builder()
+                    .transactionType("credit")
+                    .transactionAmount(creditDebitDTO.getAmount())
+                    .accountBalance(customer.getAccountBalance().add(creditDebitDTO.getAmount()))
+                    .customer(customer)
+                    .build());
+            customer.setTransactions(transactions);
             customerRepository.save(customer);
             return BankResponse.builder()
                     .responseCode(ResponseDetails.ACCOUNT_CREDIT_SUCCESSFUL_CODE)
@@ -59,6 +70,14 @@ public class CreditDebitServiceImpl implements CreditDebitService {
                         .build();
             else {
                 customer.setAccountBalance(customer.getAccountBalance().subtract(creditDebitDTO.getAmount()));
+                Set<Transaction> transactions = customer.getTransactions();
+                transactions.add(Transaction.builder()
+                        .transactionType("debit")
+                        .transactionAmount(creditDebitDTO.getAmount())
+                        .accountBalance(customer.getAccountBalance().add(creditDebitDTO.getAmount()))
+                        .customer(customer)
+                        .build());
+                customer.setTransactions(transactions);
                 customerRepository.save(customer);
                 return BankResponse.builder()
                         .responseCode(ResponseDetails.ACCOUNT_DEBIT_SUCCESSFUL_CODE)

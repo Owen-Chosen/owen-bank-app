@@ -9,6 +9,8 @@ import com.rencia.owen_bank_app.dto.CustomerInfo;
 import com.rencia.owen_bank_app.utils.ResponseDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -21,6 +23,9 @@ public class CustomerServiceImpl implements CustomerService{
 
     @Autowired
     EmailService emailService;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Value("${spring.mail.username}")
     private String senderEmail;
@@ -46,6 +51,9 @@ public class CustomerServiceImpl implements CustomerService{
                 .lastName(info.getLastName())
                 .address(info.getAddress())
                 .email(info.getEmail())
+//                .password(new BCryptPasswordEncoder().encode(info.getPassword()))
+                .password(passwordEncoder.encode(info.getPassword()))
+                .password(passwordEncoder.(info.getPassword()))
                 .gender(info.getGender())
                 .phoneNumber(info.getPhoneNumber())
                 .stateOfOrigin(info.getStateOfOrigin())
